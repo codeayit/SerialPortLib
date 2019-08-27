@@ -201,7 +201,7 @@ public class AndroidSerialportApi {
         SystemClock.sleep(150);
     }
 
-    public void write(final byte command, final byte[] data, long duration) {
+    public void write(final byte command, final byte[] data, final long duration) {
 
         new Thread(new Runnable() {
             @Override
@@ -209,7 +209,7 @@ public class AndroidSerialportApi {
                 try{
                     String writeStr = ByteArrToHex(data);
                     Log.d(TAG, "write：" + writeStr);
-                    subThreadMsg(command,1,data);
+                    subThreadMsg(command,1,data,duration);
                     mOutputStream.write(data);
                 }catch (Exception e){
                     e.printStackTrace();
@@ -223,10 +223,10 @@ public class AndroidSerialportApi {
 
 
 
-    private synchronized void  subThreadMsg(byte command,int type,byte[] data){
+    private synchronized void  subThreadMsg(byte command,int type,byte[] data,long duration){
         if (type ==1){
             //发送 添加消息
-            SubThreadMsg msg = new SubThreadMsg(command,data,System.currentTimeMillis(),1000);
+            SubThreadMsg msg = new SubThreadMsg(command,data,System.currentTimeMillis(),duration);
             Log.d(TAG,"添加消息："+ByteArrToHex(data));
             subThreadMsgMap.put(command,msg);
         }else  if (type == 2){
@@ -288,7 +288,7 @@ public class AndroidSerialportApi {
                                             if (observer != null) {
                                                 final Map<Byte,byte[]> data = observer.onProcessInSubThread(bytes);
                                                 for (Map.Entry<Byte,byte[]> entry:data.entrySet()){
-                                                    subThreadMsg(entry.getKey(),2,null);
+                                                    subThreadMsg(entry.getKey(),2,null,0);
                                                 }
 //                                                observer.onObserve(data);
                                                 if (data.size() > 0)
@@ -329,7 +329,7 @@ public class AndroidSerialportApi {
             @Override
             public void run() {
                 while (keepRead){
-                    subThreadMsg((byte) 1,3,null);
+                    subThreadMsg((byte) 1,3,null,0);
                     SystemClock.sleep(100);
                 }
             }
