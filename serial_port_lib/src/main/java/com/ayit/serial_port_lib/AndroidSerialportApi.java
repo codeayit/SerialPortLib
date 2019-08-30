@@ -223,7 +223,7 @@ public class AndroidSerialportApi {
 
 
 
-    private synchronized void  subThreadMsg(byte command,int type,byte[] data,long duration){
+    private synchronized Byte  subThreadMsg(byte command,int type,byte[] data,long duration){
         if (type ==1){
             //发送 添加消息
             SubThreadMsg msg = new SubThreadMsg(command,data,System.currentTimeMillis(),duration);
@@ -234,7 +234,9 @@ public class AndroidSerialportApi {
             SubThreadMsg remove = subThreadMsgMap.remove(command);
             if (remove!=null){
                 Log.d(TAG,"移除消息："+ByteArrToHex(remove.getData()));
+                return remove.getCommand();
             }
+
         }else if ( type ==3){
             //检测超时
 //            Log.d(TAG,"检测超时："+subThreadMsgMap.size()+ "   keys:" +subThreadMsgMap.keySet());
@@ -255,6 +257,7 @@ public class AndroidSerialportApi {
                 }
             }
         }
+        return null;
     }
 
     private boolean keepRead = false;
@@ -287,8 +290,16 @@ public class AndroidSerialportApi {
                                             bos = null;
                                             if (observer != null) {
                                                 final Map<Byte,byte[]> data = observer.onProcessInSubThread(bytes);
-                                                for (Map.Entry<Byte,byte[]> entry:data.entrySet()){
-                                                    subThreadMsg(entry.getKey(),2,null,0);
+//                                                for (Map.Entry<Byte,byte[]> entry:data.entrySet()){
+//                                                    subThreadMsg(entry.getKey(),2,null,0);
+//                                                }
+                                                Iterator<Map.Entry<Byte, byte[]>> it = data.entrySet().iterator();
+                                                while (it.hasNext()){
+                                                    Map.Entry<Byte, byte[]> entry = it.next();
+                                                    Byte b = subThreadMsg(entry.getKey(), 2, null, 0);
+                                                    if (b!=null){
+                                                        it.remove();
+                                                    }
                                                 }
 //                                                observer.onObserve(data);
                                                 if (data.size() > 0)

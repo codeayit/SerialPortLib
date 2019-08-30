@@ -53,12 +53,15 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-//        api.startKeepReadInSubThread();
+        api.startKeepReadInSubThread();
     }
 
     public void send(View v){
-        byte[] data = new byte[]{(byte) 0xaa ,0x55 ,0x02, 0x51 ,0x01};
-        api.write(((byte)0x51),data,500);
+        byte[] command1 = new byte[]{(byte) 0xaa, 0x55 ,0x02 ,0x51 ,0x01 ,0x75};
+        byte[] command2 = new byte[]{(byte) 0xaa, 0x55 ,0x02 ,0x51 ,0x01 , (byte) 0x97};
+        byte[] command3 = new byte[]{(byte) 0xaa, 0x55 ,0x02 ,0x51 ,0x01 , (byte) 0xc9};
+        byte[] command4 = new byte[]{(byte) 0xaa, 0x55 ,0x02 ,0x51 ,0x01 ,0x4a};
+        api.write((byte) 0x51,command1,1000);
     }
 
 
