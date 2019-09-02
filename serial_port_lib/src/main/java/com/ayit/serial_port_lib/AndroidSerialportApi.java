@@ -281,7 +281,7 @@ public class AndroidSerialportApi {
                                     byte[] buffer = new byte[1024];
                                     int read = mInputStream.read(buffer);
                                     bos.write(buffer,0, read);
-                                    Log.d(TAG,"实时接受：:" +ByteArrToHex(bos.toByteArray()));
+//                                    Log.d(TAG,"实时接受：:" +ByteArrToHex(bos.toByteArray()));
                                 } else {
                                     if (--count == 0) {
                                         if (bos.size() > 0) {
@@ -290,17 +290,17 @@ public class AndroidSerialportApi {
                                             bos = null;
                                             if (observer != null) {
                                                 final Map<Byte,byte[]> data = observer.onProcessInSubThread(bytes);
-//                                                for (Map.Entry<Byte,byte[]> entry:data.entrySet()){
-//                                                    subThreadMsg(entry.getKey(),2,null,0);
-//                                                }
-                                                Iterator<Map.Entry<Byte, byte[]>> it = data.entrySet().iterator();
-                                                while (it.hasNext()){
-                                                    Map.Entry<Byte, byte[]> entry = it.next();
-                                                    Byte b = subThreadMsg(entry.getKey(), 2, null, 0);
-                                                    if (b!=null){
-                                                        it.remove();
-                                                    }
+                                                for (Map.Entry<Byte,byte[]> entry:data.entrySet()){
+                                                    subThreadMsg(entry.getKey(),2,null,0);
                                                 }
+//                                                Iterator<Map.Entry<Byte, byte[]>> it = data.entrySet().iterator();
+//                                                while (it.hasNext()){
+//                                                    Map.Entry<Byte, byte[]> entry = it.next();
+//                                                    Byte b = subThreadMsg(entry.getKey(), 2, null, 0);
+//                                                    if (b!=null){
+//                                                        it.remove();
+//                                                    }
+//                                                }
 //                                                observer.onObserve(data);
                                                 if (data.size() > 0)
                                                     handler.post(new Runnable() {
