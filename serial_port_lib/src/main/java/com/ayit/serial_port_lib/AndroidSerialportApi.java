@@ -69,6 +69,14 @@ public class AndroidSerialportApi {
     private OutputStream mOutputStream;
     private InputStream mInputStream;
 
+    public OutputStream getmOutputStream() {
+        return mOutputStream;
+    }
+
+    public InputStream getmInputStream() {
+        return mInputStream;
+    }
+
     public AndroidSerialportApi() {
         this.serialPort = def_serial_port;
         this.baudrate = def_baudrate;
