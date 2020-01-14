@@ -519,6 +519,10 @@ public class AndroidSerialportApi {
         }
     }
 
+    public static int byte2Int(byte b){
+        return b&0xff;
+    }
+
     public static short hex2short(String hexH,String hexL) throws Exception {
         if (hexH.length()!=2 || hexL.length()!=2){
             throw new Exception("hexString lenght must be 2");
