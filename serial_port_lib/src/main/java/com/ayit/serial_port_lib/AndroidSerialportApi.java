@@ -66,8 +66,8 @@ public class AndroidSerialportApi {
         this.readTimeOut = readTimeOut;
     }
 
-    private OutputStream mOutputStream;
-    private InputStream mInputStream;
+    public OutputStream mOutputStream;
+    public InputStream mInputStream;
 
     public OutputStream getmOutputStream() {
         return mOutputStream;
@@ -231,7 +231,7 @@ public class AndroidSerialportApi {
 
 
 
-    private synchronized Byte  subThreadMsg(byte command,int type,byte[] data,long duration){
+    public synchronized Byte  subThreadMsg(byte command,int type,byte[] data,long duration){
         if (type ==1){
             //发送 添加消息
             SubThreadMsg msg = new SubThreadMsg(command,data,System.currentTimeMillis(),duration);
@@ -268,7 +268,7 @@ public class AndroidSerialportApi {
         return null;
     }
 
-    private boolean keepRead = false;
+    public boolean keepRead = false;
 
     public void startKeepReadInSubThread() {
         keepRead = true;
@@ -283,12 +283,14 @@ public class AndroidSerialportApi {
                     try {
                         if (mInputStream.available() != 0) {
                             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                            int count = 3;
+                            int count = 5;
                             while (true) {
                                 if (mInputStream.available() != 0) {
-                                    byte[] buffer = new byte[1024];
+                                    byte[] buffer = new byte[10*1024*1024];
                                     int read = mInputStream.read(buffer);
-                                    bos.write(buffer,0, read);
+                                    if (read!=-1){
+                                        bos.write(buffer,0, read);
+                                    }
 //                                    Log.d(TAG,"实时接受：:" +ByteArrToHex(bos.toByteArray()));
                                 } else {
                                     if (--count == 0) {
@@ -325,13 +327,13 @@ public class AndroidSerialportApi {
                                     }else{
                                     }
                                 }
-                                SystemClock.sleep(10);
+                                SystemClock.sleep(50);
                             }
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    SystemClock.sleep(10);
+                    SystemClock.sleep(50);
                 }
 
             }
@@ -342,7 +344,7 @@ public class AndroidSerialportApi {
         keepRead = false;
     }
 
-    private void checkSubThreadTimeout(){
+    public void checkSubThreadTimeout(){
 
         new Thread(new Runnable() {
             @Override
