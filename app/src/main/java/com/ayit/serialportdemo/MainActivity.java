@@ -8,6 +8,7 @@ import android.view.View;
 import com.ayit.serial_port_lib.AndroidSerialportApi;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,9 +26,9 @@ public class MainActivity extends AppCompatActivity {
 
         api.setObserver(new AndroidSerialportApi.ReadDateObserver() {
             @Override
-            public Map<Byte, byte[]> onProcessInSubThread(byte[] data) {
+            public Map<Byte, List<byte[]>> onProcessInSubThread(byte[] data) {
                 Log.d(api.TAG,"接受："+ api.ByteArrToHex(data));
-                Map<Byte,byte[]> map = new HashMap<>();
+                Map<Byte,List<byte[]>> map = new HashMap<>();
 
 //                for (int i=0;i<data.length;i++){
 //                    if (data[i] == 0x51){
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onObserveInMainThread(Map<Byte, byte[]> data) {
+            public void onObserveInMainThread(Map<Byte, List<byte[]>> data) {
 //                for (Map.Entry<Byte, byte[]> entry:data.entrySet()){
 //                    Log.d(api.TAG,"接受："+ api.ByteArrToHex(entry.getValue()));
 //                }
