@@ -299,8 +299,8 @@ public class AndroidSerialportApi {
                                             bos.close();
                                             bos = null;
                                             if (observer != null) {
-                                                final Map<Byte,byte[]> data = observer.onProcessInSubThread(bytes);
-                                                for (Map.Entry<Byte,byte[]> entry:data.entrySet()){
+                                                final Map<Byte,byte[][]> data = observer.onProcessInSubThread(bytes);
+                                                for (Map.Entry<Byte,byte[][]> entry:data.entrySet()){
                                                     subThreadMsg(entry.getKey(),2,null,0);
                                                 }
 //                                                Iterator<Map.Entry<Byte, byte[]>> it = data.entrySet().iterator();
@@ -459,7 +459,7 @@ public class AndroidSerialportApi {
          * v 指令数据
          * @return
          */
-        Map<Byte,byte[]> onProcessInSubThread(byte[] data);
+        Map<Byte,byte[][]> onProcessInSubThread(byte[] data);
 
         /**
          *
@@ -468,7 +468,7 @@ public class AndroidSerialportApi {
          * v 指令数据
          * @return
          */
-        void onObserveInMainThread(Map<Byte,byte[]> data);
+        void onObserveInMainThread(Map<Byte,byte[][]> data);
 
 
 
